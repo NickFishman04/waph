@@ -10,17 +10,17 @@ Public Respository for Web Application Programming and Hacking course - Dr. Phu 
 
 **Name**: Nick Fishman
 
-**Email**: [mailto:phung-waph@hotmail.com](fishmane@mail.uc.edu)
+**Email**: [fishmane@mail.uc.edu](fishmane@mail.uc.edu)
 
-**Short-bio**: ADD. 
+**Short-bio**: Nick Fishman is an electrical engineering student with a specific interest in hardware and circuits. 
 
 ![Nick's headshot](headshot.jpeg)
 
 ## Repository Information
 
-Respository's URL: [https://github.com/waph-phung/waph-phungph.git](https://github.com/waph-phung/waph-phungph.git)
+Respository's URL: [https://github.com/NickFishman04/waph.git](https://github.com/NickFishman04/waph.git)
 
-This is a private repository for Phu Phung to store all code from the course. The organization of this repository is as follows.
+This is a private repository for Nick Fishman to store all code from the course. The organization of this repository is as follows.
 
 ### Labs 
 
