@@ -4,86 +4,84 @@
 
 # Lab 1 - Foundations of the Web 
 
-## Overview 
-
-This lab is covered in Lecture 3 with the following tasks.
-
-### Part I: The Web and HTTP Protocol
-
-   1. Task 1 (10 pts). Familiar with the Wireshark tool and HTTP protocol
-   2. Task 2 (10 pts). Understanding HTTP using telnet and Wireshark.
-
-### Part II: Basic Web Application Programming
-
-   1. Task 1 (10 pts). CGI Web applications in C
-   2. Task 2 (10 pts). A simple PHP Web Application with user input.
-   3. Task 3 (10 pts). Understanding HTTP GET and POST requests
-
-Follow the detailed instructions in Lecture 3's slides with a hands-on demonstration during the class to complete this lab.
-
-## Report and deliverables
-
-As prepared in [Lab 0](../lab0), you need to create a sub-folder `labs/lab1` with a README.md file to write a report in Markdown format and generate the report to PDF using the `pandoc` application. All of the code from this lab must also be stored in this folder and included in the report if required. **Please note that the required screenshots must include your virtual machine name or your name with proper captions and be visible, e.g., not too blurry, for grading**. Your report should follow the template provided in Lecture 2 ([https://github.com/waph-phung/waph/blob/main/README-template.md](https://github.com/waph-phung/waph/blob/main/README-template.md)) which should include the course name and instructor, your name and email, together with your headshot (150x150 pixels), and the following sub-sections:
-
 ## The lab's overview
 
-**(0 pts, -3pts if missing)**
+![Headshot (150x150p)](headshot.jpg)
 
-Write an overview of the lab and the outcomes you learned from this lab.
+Lab 1 introduced how the web works at the protocol level and how simple server-side apps are built. I used Wireshark to inspect real HTTP traffic, used telnet and curl to send raw HTTP requests, and wrote small C CGI and PHP programs to see how GET and POST data are handled. By the end I understood how headers and request formats change server responses, how to capture and interpret HTTP packets, and the basic security considerations for echo-style web apps.
 
-Also, include a direct clickable link to the lab folder on GitHub.com so that it can be viewed when grading, for example,  [https://github.com/waph-phung/waph-phungph/tree/main/labs/lab1](https://github.com/waph-phung/waph-phungph/tree/main/labs/lab1).
-
+[https://github.com/NickFishman04/waph/blob/main/labs/lab1](https://github.com/NickFishman04/waph/blob/main/labs/lab1)
 
 ## Part I - The Web and HTTP Protocol
 
 ### Task 1. Familiar with the Wireshark tool and HTTP protocol
 
-Write a summary of how you used the Wireshark tool to examine the HTTP protocol **(2.5 pts)** and demonstrate with three screenshots of the HTTP Request, Response messages, and HTTP Stream with proper captions **(2.5 pts each)**.   
+# Task 1 Summary: 
+I used Wireshark to capture network traffic while opening webpages in a browser. Then, I filtered the packets using HTTP to see the requests and responses between the client and server.
+
+# Task 1 Screenshots:
+![Screenshot 1: HTTP Request](Scr1.png)
+![Screenshot 2: Response Message](Scr2.png)
+![Screenshot 3: HTTP Stream](Scr3.png)
 
 ### Task 2. Understanding HTTP using telnet and Wireshark
 
-Summarize how you used the telnet program to send a minimal HTTP Request and the Wireshark tool to examine the HTTP messages **(2.5 pts)**. Demonstrate the tasks with the following screenshots, with proper captions and explanations:
+  I captured network traffic in Wireshark, opened telnet to the server, and sent a minimal HTTP request (GET /). I viewed the server response in the terminal. Wireshark showed the telnet request had far fewer headers than a browser request.
+  
+  ![Screenshot 4: HTTP Request in terminal](Scr4.png)
+  
+  ![Screenshot 5: HTTP Request in Wireshark](Scr5.png)
+  The difference is that the telnet request is minimal and lacks most of the headers a browser sends.
 
-  1. A screenshot of your terminal showing the HTTP Request (you typed) and HTTP response from the server. **(2.5 pts)**
-  2. A screenshot of the HTTP Request message (you typed in telnet above) in Wireshark, as in Task 1. Is there any difference between this HTTP Request message and the one the browser sent in Task 1? Hints: What fields are missing in this request compared to the one the browser sent? **(2.5 pts)**
-  3. A screenshot of the HTTP Response message in Wireshark shows  that the server responded to your request. Is there any difference between this HTTP Response message and the one in Task 1? **(2.5 pts)**
+  ![Screenshot 6: HTTP Response in Wireshark](Scr6.png)
+  Sometimes. Often the status and body match, but the telnet response can differ because the telnet request lacks browser headers.
 
 ## Part II - Basic Web Application Programming
 
 ###   Task 1. (10 pts) CGI Web applications in C
 
-   a. Summarize how you developed a Hello World CGI program in C and compiled and deployed the program on the web server.  **(2.5 pts)**. Demonstrate the task with a screenshot showing that the CGI program is invoked properly in a browser. **(2.5 pts)**
+   I wrote a C program that prints HTTP headers and HTML, compiled it with gcc, placed the executable in the server's cgi-bin, enabled CGI in Apache, and verified it by opening the CGI URL in a browser.
+   ![Screenshot 7: C program invoked on chrome](Scr7.png)
    
-   b. **(5 pts)** Summarize and demonstrate with a screenshot that you can write another C CGI program and deploy it with a simple HTML template provided on https://www.w3schools.com/html/ with a proper title, heading, and paragraph, i.e., the course and your information should be there. Include the source code of the file in the report. An example of code inclusion is below.
-   
-   Included file `helloworld.c`:
-   ```C
-      #include <stdio.h>
-      int main(void) {
-        printf("Content-Type: text/plain; charset=utf-8\n\n");
-        printf("Hello World CGI! From Phu Phung, WAPH\n\n");
-        return 0;
-      }
-   ```
+   ![Screenshot 8: New C program invoked on chrome](Scr8.png)
+   Source code:
+   #include <stdio.h>
+
+int main(void) {
+  printf("Content-Type: text/html; charset=utf-8");
+  printf("<!doctype html><html><head><meta charset=\"utf-8\"><title>WAPH Lab - Info</title></head><body>");
+  printf("<h1>WAPH — Web Application Programming and Hacking</h1>");
+  printf("<h2>Student: Nick-Fishman</h2>");
+  printf("<p>Course: Web Application Programming and Hacking. This page demonstrates a C CGI rendering an HTML template.</p>");
+  printf("</body></html>
+");
+  return 0;
+}
 
 ###  Task 2 (10 pts). A simple PHP Web Application with user input.
 
-a. **(2.5 pts)** Summarize and demonstrate with a screenshot that you have successfully developed a simple `helloworld.php` PHP page with your name and PHP configuration as guided in Lecture 3. 
+   ![Screenshot 9: First php program shown in chrome](Scr9.png)
 
 b. Demonstrate that you developed and deployed an echo Web application in PHP, e.g., `echo.php` with a screenshot with your name in the data **(2.5 pts)**. Include the source code of the file in the report and discuss if there are any security risks in this simple web application. **(5 pts)**
 
+If I use the below script in the data portion of the query, I can hijack the text field for my personal script.
+http://localhost/echo.php?data=%3Cscript%3Ealert(%27Hacked%27);%3C/script%3E
+
+   ![Screenshot 10: Second php program shown in chrome](Scr10.png)
+
+<?php
+
+	echo $_REQUEST["data"];
+?>
+
 ### Task 3 (10 pts). Understanding HTTP GET and POST requests.
 
-a. Briefly describe how you used Wireshark to examine the HTTP GET Request and Response for the `echo.php` page with your name in the data. Demonstrate with two corresponding screenshots in Wireshark. **(2.5 pts)**
+   ![Screenshot 11: HTTP request in wireshark](Scr11.png)
 
-b. Summarize using `curl` to create an HTTP POST request with your name in the data. Demonstrate the outcome with a screenshot from the `curl` program **(2.5 pts)**, and a screenshot of the corresponding HTTP Stream in Wireshark. **(2.5 pts)**
+   ![Screenshot 12: HTTP response in wireshark](Scr12.png)
 
-c. Compare the similarity/difference between HTTP POST Request and HTTP GET Request, and between the two HTTP Responses above. **(2.5 pts)**    
+   ![Screenshot 13: HTTP response in the terminal (curl)](Scr13.png)
+   
+   ![Screenshot 14: HTTP response in wireshark (curl)](Scr14.png)
 
-## Submission
-
-Use the `pandoc` tool to generate the PDF report for submission from the `README.md` file, and make sure that the report and contents are rendered properly.
-
-**Note**: If you face the issue that figures are not rendered in preferred positions, use option `-f markdown-implicit_figures -t pdf` to disable the default `implicit_figures` option in pandoc
-
-The PDF file should be named `your-username-waph-lab1.pdf`, e.g., `phungph-waph-lab1.pdf` 
+While the two are identical in outcome, in the get version, the data was a part of the address, while in the post version, it is a part of the metadata. The responses are exactly the same.
