@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WAPH - Nick Fishman</title>
+  <script src="email.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <h1 style="font-family: Arial;">Welcome to my WAPH Page</h1>
+  <img src="headshot.jpg" alt="My Headshot" width="150" height="150">
+  <form>
+    <label>Name: <input type="text" name="name"></label><br><br>
+    <label>Email: <input type="email" name="email"></label><br><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <p onclick="alert('Current date and time: ' + new Date())">Click here to see current date/time</p>
+
+  <h2>Keystroke Logger</h2>
+  <p>Press any key!</p>
+  <div id="keystroke-display" style="border: 1px solid #ccc; padding: 10px; min-height: 40px;"></div>
+
+  <h2>Digital Clock</h2>
+  <p id="digital-clock"></p>
+
+  <h2>Email</h2>
+  <button onclick="showHideEmail()">Show/Hide My Email</button>
+  <p id="email" style="display:none;"></p>
+
+  <h2>Analog Clock</h2>
+  <canvas id="analog-clock" width="200" height="200"></canvas>
+
+  <h2>Ajax Demo</h2>
+  <input type="text" id="ajax-input" placeholder="Enter something">
+  <button onclick="sendAjax()">Send Ajax Request</button>
+  <div id="ajax-response"></div>
+
+  <h2>jQuery Ajax</h2>
+
+<!-- Button 1 -->
+  <input type="text" id="jquery-input1" placeholder="Enter data">
+  <button id="jquery-btn1">jQuery Ajax Request 1</button>
+  <div id="jquery-response1"></div>
+
+<!-- Button 2 -->
+  <input type="text" id="jquery-input2" placeholder="Enter data">
+  <button id="jquery-btn2">jQuery Ajax Request 2</button>
+  <div id="jquery-response2"></div>
+
+  <h2>Random Programming Joke</h2>
+  <p id="joke-display">Loading joke...</p>
+  
+  <h2>Agify - Guess Age by Name</h2>
+  <input type="text" id="agify-name" placeholder="Enter a name">
+  <button onclick="guessAge()">Guess Age</button>
+  <p id="agify-result"></p>
+
+<!-- Styles (CSS) -->
+
+  <style>
+  body {background-color: powderblue;}
+  h1 {color: blue;}
+  </style>
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet"
+  href=https://www.w3schools.com/html/styles.css>
+
+<!-- Scripts -->
+
+  <script>
+    function guessAge() {
+      var name = document.getElementById("agify-name").value;
+      fetch("https://api.agify.io/?name=" + name)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("agify-result").innerHTML =
+            "Predicted age for " + data.name + ": " + data.age;
+        });
+    }
+</script>
+
+  <script>
+    $(document).ready(function() {
+      $.ajax({
+        url: "https://v2.jokeapi.dev/joke/Programming?type=single",
+        type: "GET",
+        success: function(data) {
+          $("#joke-display").html(data.joke);
+        }
+      });
+    });
+  </script>
+
+  <script>
+    $("#jquery-btn1").click(function() {
+      var input = $("#jquery-input1").val();
+      $.get("http://localhost/echo.php?data=" + input, function(data) {
+        $("#jquery-response1").html(data);
+      });
+    });
+
+    $("#jquery-btn2").click(function() {
+      var input = $("#jquery-input2").val();
+      $.get("http://localhost/echo.php?data=" + input, function(data) {
+        $("#jquery-response2").html(data);
+      });
+    });
+  </script>
+
+  <script src="analogclock.js"></script>
+
+  <script>
+    // Keystroke logger
+    var keyLog = [];
+    document.addEventListener("keydown", function(event) {
+      console.log("Key pressed: " + event.key);
+      keyLog.push(event.key);
+      if (keyLog.length > 10) keyLog.shift();
+      var html = "<ol>";
+      for (var i = keyLog.length - 1; i >= 0; i--) {
+        html += "<li>" + keyLog[i] + "</li>";
+      }
+      html += "</ol>";
+      document.getElementById("keystroke-display").innerHTML = html;
+    });
+
+    // Digital clock
+    function updateClock() {
+      document.getElementById("digital-clock").innerHTML = new Date().toLocaleTimeString();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Ajax
+    function sendAjax() {
+      var input = document.getElementById("ajax-input").value;
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+          document.getElementById("ajax-response").innerHTML = this.responseText;
+        }
+      };
+      xhr.open("GET", "http://localhost/echo.php?data=" + input, true);
+      xhr.send();
+    }
+  </script>
+
+</body>
+</html>
