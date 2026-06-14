@@ -41,4 +41,6 @@ This is a private repository for Nick Fishman to store all code from the course.
 
 ### Individual Projects
 
+- [Individual Project 1](projects/iproject1): Professional Profile Website and API Integration
+
 ### Team Project
